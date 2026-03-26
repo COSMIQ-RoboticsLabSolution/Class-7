@@ -1,27 +1,73 @@
-// Define the pin number connected to the button (Digital Pin 7)
-int buttonPin = 7;
-// Define the pin number connected to the LED (Digital Pin 10)
-int LedPin = 10;
+/*
+  =========================================================
+   Arduino UNO - Button Controlled LED
+  =========================================================
 
-// Initialization function, runs once when the Arduino starts
+  CONNECTIONS:
+  ---------------------------------------------------------
+  LED:
+    Positive (Long leg)  -> Digital Pin 10 (D10)
+    Negative (Short leg) -> GND (via 220Ω resistor)
+
+  BUTTON:
+    One side  -> Digital Pin 7 (D7)
+    Other side -> GND
+
+    NOTE:
+    - This code assumes INPUT mode (external resistor setup).
+    - If using INPUT_PULLUP, logic will be reversed.
+
+  WORKING:
+  ---------------------------------------------------------
+  - When button is PRESSED → LED turns OFF
+  - When button is RELEASED → LED turns ON
+  - This happens because of the wiring logic used
+*/
+
+// ==========================
+// PIN DEFINITIONS
+// ==========================
+int buttonPin = 7;   // Button connected to digital pin 7
+int LedPin = 10;     // LED connected to digital pin 10
+
+// ==========================
+// SETUP FUNCTION (runs once)
+// ==========================
 void setup() {
-  // Configure the LED pin as an output to control the LED
+
+  // Set LED pin as OUTPUT (to control LED ON/OFF)
   pinMode(LedPin, OUTPUT);
-  // Configure the button pin as an input to read button state
+
+  // Set button pin as INPUT (to read button state)
   pinMode(buttonPin, INPUT);
 }
 
-// Main loop function, runs repeatedly after setup completes
+// ==========================
+// LOOP FUNCTION (runs forever)
+// ==========================
 void loop() {
-  // Read the button pin state (HIGH = pressed, LOW = released)
-  // Assumes button is configured as pull-up (LOW when not pressed)
-  if (digitalRead(buttonPin))
-    // When button is pressed, set LED pin LOW to turn LED off
-    digitalWrite(LedPin, LOW);
-  else
-    // When button is released, set LED pin HIGH to turn LED on
-    digitalWrite(LedPin, HIGH);
 
-  // Delay for 100ms to debounce the button and reduce CPU usage
+  // Read the current state of the button
+  // HIGH  → Button pressed (depending on wiring)
+  // LOW   → Button not pressed
+  int buttonState = digitalRead(buttonPin);
+
+  // ==========================
+  // CONDITION CHECK
+  // ==========================
+  if (buttonState == HIGH) {
+    
+    // Button is pressed
+    // Turn LED OFF
+    digitalWrite(LedPin, LOW);
+
+  } else {
+    
+    // Button is not pressed
+    // Turn LED ON
+    digitalWrite(LedPin, HIGH);
+  }
+
+  // Small delay to stabilize reading (basic debouncing)
   delay(100);
 }
